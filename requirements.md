@@ -11,6 +11,7 @@
   - CastAbility
   - UseItem
 - PowerUp
+  - effect
 - Container
   - item (ability / item)
 - Enemy +++
