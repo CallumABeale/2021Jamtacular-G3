@@ -17,5 +17,4 @@ class Ability {
 		// Call in draw
 		// Call controls && idle animation
 	}
-	idle() {}
 }
