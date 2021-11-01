@@ -2,14 +2,26 @@
 
 ## Objects
 
-- Player
+- Player +++
+  - health
+  - activeAbility
+  - abilityLst
+  - activeItem
+  - itemLst
+  - CastAbility
+  - UseItem
 - PowerUp
 - Container
-- Enemy
+  - item (ability / item)
+- Enemy +++
   - Basic
-  - Boss
-- Ability
+  - Boss ++
+- Ability ++
+  - effect
+  - dmg
   - Player
   - Basic
   - Boss
-- Level
+- Item
+- Level +++
+  - levelState = 1, 2, 3, 4, 5
