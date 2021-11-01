@@ -1,5 +1,7 @@
 class PowerUp {
 	constructor() {
+		this.sprite;
+		this.animations = {};
 		this.effect;
 	}
 	p5Load() {
