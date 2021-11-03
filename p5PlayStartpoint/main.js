@@ -1,11 +1,11 @@
 //this is the one you'll write your code in make sure to change the script tag in index.html to use main.js instead of test.js
-const CANVASWIDTH = 1600;
-const CANVASHEIGHT = 800;
+const CANVASWIDTH = 5000;
+const CANVASHEIGHT = 2000;
 let testLevel;
 function preload() {}
 
 function setup() {
-    createCanvas(CANVASWIDTH,CANVASHEIGHT);
+    createCanvas(1500,1000);
     testLevel = new Level();
     testLevel.p5Init();
     testPlayer = new Player();
@@ -17,7 +17,7 @@ function draw() {
     if (frameCount>10){
         camera.position.x = testPlayer.sprite.position.x
         camera.position.y = testPlayer.sprite.position.y
-        // camera.zoom = resolution*.75
+        camera.zoom = resolution/10
         testPlayer.update();
     }
     drawSprites();

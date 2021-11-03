@@ -15,9 +15,12 @@ class Player {
 	p5Init(x = width * 0.2, y = height * 0.8) {
 		// Call in setup
 		// Create sprite && set sprite settings
-		this.sprite = createSprite((endPos.x+0.5)*CANVASWIDTH/resolution, (endPos.y+0.5)*CANVASHEIGHT/resolution,CANVASWIDTH/resolution/5,CANVASHEIGHT/resolution/2.5);
+		this.sprite = createSprite((endPos.x+0.5)*CANVASWIDTH/resolution, (endPos.y+0.5)*CANVASHEIGHT/resolution,CANVASWIDTH/resolution/10,CANVASHEIGHT/resolution/5);
 		this.sprite.friction = 0.1;
-		this.sprite.jumpActive = false;
+		this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
+		this.sprite.debug = false;
+
+		this.sprite.jumpActive = true;
 	}
 	update() {
 		// Call in draw
@@ -25,8 +28,10 @@ class Player {
 		if (this.sprite.collide(groundGroup)){
 			this.sprite.jumpActive=true;
 		}
-		this.sprite.collide(roofGroup);
-		this.sprite.collide(walls);
+		if (this.sprite.collide(roofGroup)){
+			this.sprite.velocity.y = 0;
+		}
+		this.sprite.collide(walls)
 
 		this.controls();
 		if (int(this.sprite.velocity.x) === 0) {
@@ -53,49 +58,57 @@ class Player {
 		/**
 		 * always applying gravity
 		 */
-		this.sprite.velocity.y+=0.3
-		
+		this.sprite.velocity.y+=1
 		
 		/**
 		 * If LEFT_ARROW is pressed, move left
 		 */
 		if (keyIsDown(LEFT_ARROW)) {
 			// this.sprite.changeAnimation("moving")
-			// this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
-			this.sprite.velocity.x-=.5;
+			if (keyIsDown(16)) {
+				this.sprite.velocity.x-=1.25;
+			}
+			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
+			this.sprite.velocity.x-=.75;
 		}
 		/**
 		 * If RIGHT_ARROW is pressed, move right
+		 * If SHIFT is pressed, it will move twice as fast
 		 */
 		if (keyIsDown(RIGHT_ARROW)) {
+			if (keyIsDown(16)) {
+				this.sprite.velocity.x+=1.25;
+			}
 			// this.sprite.changeAnimation("moving")
-			// this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
-			this.sprite.velocity.x+=.5;
+			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
+			this.sprite.velocity.x+=.75;
 		}
 		/**
 		 * If UP_ARROW is pressed, jump
 		 */
-		if (keyIsDown(UP_ARROW) && this.sprite.jumpActive == true) {
-			this.sprite.velocity.y =-10;
+		if (keyIsDown(32)) {
+			if (this.sprite.jumpActive == true){
+			this.sprite.velocity.y =-20;
 			this.sprite.jumpActive = false;
+			}
 		}
 		/**
 		 * If Q is pressed, use ability
 		 */
-		if (keyIsDown(keyCode === 81)) {
+		if (keyIsDown(81)) {
 			this.castAbility();
 		}
 		/**
 		 * If E is pressed, use item
 		 */
-		if (keyIsDown(keyCode === 69)) {
+		if (keyIsDown(69)) {
 			this.useItem();
 		}
 		/**
 		 * If R is pressed, cycle ability
 		 */
-		if (keyIsDown(keyCode === 82)) [this.cycleAbility()];
-		if (keyIsDown(keyCode === 70)) {
+		if (keyIsDown(82)) [this.cycleAbility()];
+		if (keyIsDown(70)) {
 			this.cycleItem();
 		}
 	}

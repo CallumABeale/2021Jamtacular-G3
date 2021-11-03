@@ -2,7 +2,7 @@ let groundGroup;
 let roofGroup;
 let walls;
 let current;
-var resolution = 15;
+var resolution = 20;
 let grid = [];
 let stack = [];
 let maxStack = 0;
@@ -65,13 +65,13 @@ function createMaze() {
             }
         }
         levelGenerated = true;
-        let ground = createSprite(CANVASWIDTH/2, CANVASHEIGHT, CANVASWIDTH, CANVASHEIGHT/resolution/10)
-        let wall = createSprite(0, CANVASHEIGHT/2, CANVASWIDTH/resolution/10, CANVASHEIGHT);
+        let ground = createSprite(CANVASWIDTH/2, CANVASHEIGHT, CANVASWIDTH+CANVASWIDTH/resolution/5, CANVASHEIGHT/resolution/2.5)
+        let wall = createSprite(0, CANVASHEIGHT/2, CANVASWIDTH/resolution/5, CANVASHEIGHT+CANVASHEIGHT/resolution/2.5);
         ground.immovable = true;
+        ground.debug = false;
         wall.immovable = true;
         groundGroup.add(ground);
         walls.add(wall);
-        return
 
     }
     if (!levelGenerated){
@@ -93,6 +93,9 @@ function removeWalls(a, b) {
     }
 }
 
+function populateLevel(){
+// for (let i = 0 ; i< groundGroup.length ; i++){}
+}
 
 class Cell {
     constructor(x, y) {
@@ -103,23 +106,24 @@ class Cell {
         this.wall = [true, true];
     }
     show() {
-
         let xPos = this.x * this.w;
         let yPos = this.y * this.h;
         stroke(255);
         strokeWeight(1)
         if (this.wall[0]) {
             line(xPos, yPos, xPos + this.w, yPos)
-                let ground = createSprite((this.x + 0.5) * this.w, (this.y) * this.h-CANVASWIDTH/resolution/40, this.w+CANVASWIDTH/resolution/10, CANVASWIDTH/resolution/20)
-                let roof = createSprite((this.x + 0.5) * this.w , (this.y) * this.h+CANVASWIDTH/resolution/40, this.w+CANVASWIDTH/resolution/10, CANVASWIDTH/resolution/20)
+                let ground = createSprite(int((this.x + 0.5) * this.w),int((this.y) * this.h-CANVASWIDTH/resolution/20), int(this.w+CANVASWIDTH/resolution/5), int(CANVASWIDTH/resolution/10));
+                let roof = createSprite(int((this.x + 0.5) * this.w) , int((this.y) * this.h+CANVASWIDTH/resolution/20), int(this.w+CANVASWIDTH/resolution/5), int(CANVASWIDTH/resolution/10));
                 ground.immovable = true;
+                ground.debug = false;
                 roof.immovable = true;
+                roof.debug = false;
                 roofGroup.add(roof);
-                groundGroup.add(roof)
+                groundGroup.add(ground)
         }
         if (this.wall[1]) {
             line(xPos + this.w, yPos, xPos + this.w, yPos + this.h)
-                let wall = createSprite((this.x +1) * this.w, (this.y + 0.5) * this.h, CANVASWIDTH/resolution/10, this.h)
+                let wall = createSprite((this.x +1) * this.w, (this.y + 0.5) * this.h, CANVASWIDTH/resolution/5, this.h+CANVASWIDTH/resolution/10)
                 wall.immovable = true;
                 walls.add(wall)
         }

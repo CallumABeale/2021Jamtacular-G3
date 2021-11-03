@@ -9,6 +9,7 @@ class Level {
 		// Call in setup
 		// Create sprite && set sprite settings
 		GenerateLevel();
+		populateLevel();
 	}
 	update() {
 		// Call in draw
