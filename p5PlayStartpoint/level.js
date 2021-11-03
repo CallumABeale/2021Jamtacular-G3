@@ -8,9 +8,11 @@ class Level {
 	p5Init() {
 		// Call in setup
 		// Create sprite && set sprite settings
+		GenerateLevel();
 	}
 	update() {
 		// Call in draw
 		// Call controls && idle animation
 	}
 }
+
