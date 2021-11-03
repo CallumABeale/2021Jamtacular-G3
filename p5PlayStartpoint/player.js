@@ -17,7 +17,7 @@ class Player {
 		// Create sprite && set sprite settings
 		this.sprite = createSprite((endPos.x+0.5)*CANVASWIDTH/resolution, (endPos.y+0.5)*CANVASHEIGHT/resolution,CANVASWIDTH/resolution/10,CANVASHEIGHT/resolution/5);
 		this.sprite.friction = 0.1;
-		this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
+		// this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
 		this.sprite.debug = false;
 
 		this.sprite.jumpActive = true;
@@ -25,11 +25,11 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
-		if (this.sprite.collide(groundGroup)){
+		if (this.sprite.collide(groundGroup) && this.sprite.touching.bottom){
 			this.sprite.jumpActive=true;
 		}
-		if (this.sprite.collide(roofGroup)){
-			this.sprite.velocity.y = 0;
+		if (this.sprite.collide(groundGroup) && this.sprite.touching.top){
+			this.sprite.velocity.y += 1;
 		}
 		this.sprite.collide(walls)
 
@@ -58,7 +58,7 @@ class Player {
 		/**
 		 * always applying gravity
 		 */
-		this.sprite.velocity.y+=1
+		this.sprite.velocity.y+=0.8
 		
 		/**
 		 * If LEFT_ARROW is pressed, move left
@@ -66,7 +66,7 @@ class Player {
 		if (keyIsDown(LEFT_ARROW)) {
 			// this.sprite.changeAnimation("moving")
 			if (keyIsDown(16)) {
-				this.sprite.velocity.x-=1.25;
+				this.sprite.velocity.x-=1;
 			}
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
 			this.sprite.velocity.x-=.75;
@@ -77,7 +77,7 @@ class Player {
 		 */
 		if (keyIsDown(RIGHT_ARROW)) {
 			if (keyIsDown(16)) {
-				this.sprite.velocity.x+=1.25;
+				this.sprite.velocity.x+=1;
 			}
 			// this.sprite.changeAnimation("moving")
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
@@ -88,7 +88,7 @@ class Player {
 		 */
 		if (keyIsDown(32)) {
 			if (this.sprite.jumpActive == true){
-			this.sprite.velocity.y =-20;
+			this.sprite.velocity.y =-20 - abs(this.sprite.velocity.x);
 			this.sprite.jumpActive = false;
 			}
 		}

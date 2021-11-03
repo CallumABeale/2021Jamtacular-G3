@@ -1,6 +1,6 @@
 //this is the one you'll write your code in make sure to change the script tag in index.html to use main.js instead of test.js
-const CANVASWIDTH = 5000;
-const CANVASHEIGHT = 2000;
+const CANVASWIDTH = 3500;
+const CANVASHEIGHT = 3500;
 let testLevel;
 function preload() {}
 

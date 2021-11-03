@@ -1,5 +1,4 @@
 let groundGroup;
-let roofGroup;
 let walls;
 let current;
 var resolution = 20;
@@ -11,7 +10,6 @@ let endPos;
 function GenerateLevel() {
     walls = new Group();
     groundGroup = new Group();
-    roofGroup = new Group();
     levelGenerated = false;
 
     for (let y = 0; y < resolution; y++) {
@@ -112,13 +110,9 @@ class Cell {
         strokeWeight(1)
         if (this.wall[0]) {
             line(xPos, yPos, xPos + this.w, yPos)
-                let ground = createSprite(int((this.x + 0.5) * this.w),int((this.y) * this.h-CANVASWIDTH/resolution/20), int(this.w+CANVASWIDTH/resolution/5), int(CANVASWIDTH/resolution/10));
-                let roof = createSprite(int((this.x + 0.5) * this.w) , int((this.y) * this.h+CANVASWIDTH/resolution/20), int(this.w+CANVASWIDTH/resolution/5), int(CANVASWIDTH/resolution/10));
+                let ground = createSprite(int((this.x + 0.5) * this.w),int((this.y) * this.h-CANVASWIDTH/resolution/20), int(this.w+CANVASWIDTH/resolution/5), int(CANVASWIDTH/resolution/5));
                 ground.immovable = true;
                 ground.debug = false;
-                roof.immovable = true;
-                roof.debug = false;
-                roofGroup.add(roof);
                 groundGroup.add(ground)
         }
         if (this.wall[1]) {
