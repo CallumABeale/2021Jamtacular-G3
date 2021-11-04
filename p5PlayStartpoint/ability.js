@@ -1,7 +1,8 @@
 class Ability {
-	constructor() {
+	constructor(active) {
 		this.sprite;
 		this.animations = {};
+		this.active = active;
 		this.effect;
 		this.damage;
 	}
