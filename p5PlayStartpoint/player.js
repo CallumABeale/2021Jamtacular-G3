@@ -15,10 +15,10 @@ class Player {
 	p5Init(x = width * 0.2, y = height * 0.8) {
 		// Call in setup
 		// Create sprite && set sprite settings
-		this.sprite = createSprite((endPos.x+0.5)*CANVASWIDTH/resolution, (endPos.y+0.5)*CANVASHEIGHT/resolution,CANVASWIDTH/resolution/10,CANVASHEIGHT/resolution/5);
+		this.sprite = createSprite((testSprite.position.x), (testSprite.position.y),CANVASWIDTH/resolution/10,CANVASHEIGHT/resolution/5);
 		this.sprite.friction = 0.1;
 		// this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
-		this.sprite.debug = false;
+		this.sprite.debug = true;
 
 		this.sprite.jumpActive = true;
 	}
@@ -27,9 +27,10 @@ class Player {
 		// Call controls && idle animation
 		if (this.sprite.collide(groundGroup) && this.sprite.touching.bottom){
 			this.sprite.jumpActive=true;
+			this.sprite.velocity.y = 0;
 		}
 		if (this.sprite.collide(groundGroup) && this.sprite.touching.top){
-			this.sprite.velocity.y += 1;
+			this.sprite.velocity.y += .5;
 		}
 		this.sprite.collide(walls)
 
@@ -58,37 +59,39 @@ class Player {
 		/**
 		 * always applying gravity
 		 */
-		this.sprite.velocity.y+=0.8
+		if (!this.sprite.collide(groundGroup)){
+		this.sprite.velocity.y+=1
+		}
 		
 		/**
 		 * If LEFT_ARROW is pressed, move left
 		 */
-		if (keyIsDown(LEFT_ARROW)) {
+		if (keyIsDown(LEFT_ARROW)&& !this.sprite.touching.left) {
 			// this.sprite.changeAnimation("moving")
 			if (keyIsDown(16)) {
 				this.sprite.velocity.x-=1;
 			}
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
-			this.sprite.velocity.x-=.75;
+			this.sprite.velocity.x-=.5;
 		}
 		/**
 		 * If RIGHT_ARROW is pressed, move right
 		 * If SHIFT is pressed, it will move twice as fast
 		 */
-		if (keyIsDown(RIGHT_ARROW)) {
+		if (keyIsDown(RIGHT_ARROW)&& !this.sprite.touching.right) {
 			if (keyIsDown(16)) {
 				this.sprite.velocity.x+=1;
 			}
 			// this.sprite.changeAnimation("moving")
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
-			this.sprite.velocity.x+=.75;
+			this.sprite.velocity.x+=.5;
 		}
 		/**
 		 * If UP_ARROW is pressed, jump
 		 */
 		if (keyIsDown(32)) {
 			if (this.sprite.jumpActive == true){
-			this.sprite.velocity.y =-20 - abs(this.sprite.velocity.x);
+			this.sprite.velocity.y =-30;
 			this.sprite.jumpActive = false;
 			}
 		}
