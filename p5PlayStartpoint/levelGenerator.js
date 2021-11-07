@@ -1,12 +1,14 @@
 let groundGroup;
 let walls;
 let current;
-var resolution = 10;
+var resolution = 15;
 let grid = [];
 let stack = [];
 let maxStack = 0;
 let endPos;
 let distChecker;
+let gravity = 1;
+let antiGrav;
 
 function GenerateLevel() {
     walls = new Group();
@@ -82,10 +84,14 @@ function createMaze() {
         createMaze();
     } else {
         distChecker = new Group();
+        antiGrav = new Group();
         for (let i = 0; i < groundGroup.length; i++) {
+            groundGroup[i].antiGrav = createSprite(groundGroup[i].position.x, groundGroup[i].position.y - CANVASHEIGHT / resolution / 2, groundGroup[i].width/5, groundGroup[i].height/3)
             groundGroup[i].vertDist = createSprite(groundGroup[i].position.x, groundGroup[i].position.y - CANVASHEIGHT / resolution, 1, 1);
-            groundGroup[i].vertDist.velocity.y = -10;
+            groundGroup[i].vertDist.velocity.y = -20
+            groundGroup[i].vertDist.life = 40;
             distChecker.add(groundGroup[i].vertDist);
+            antiGrav.add(groundGroup[i].antiGrav);
         }
     }
 }
@@ -109,7 +115,17 @@ function cleanupLevel() {
 }
 
 function populateLevel() {
-
+for (let i = 0 ; i <distChecker.length ; i++){
+    distChecker[i].bounce(groundGroup);
+        for (let j = 0 ; j<antiGrav.length ; j++){
+    if (groundGroup[i].vertDist.collide(antiGrav[j])){
+        antiGrav[j].remove();
+        groundGroup[i].vertDist.remove();
+        i--;
+        j--;
+    }
+}
+}
 
 }
 

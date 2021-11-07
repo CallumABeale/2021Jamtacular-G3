@@ -25,26 +25,39 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
-		if (this.sprite.collide(groundGroup) && this.sprite.touching.bottom) {
-			this.sprite.jumpActive = true;
-			this.sprite.velocity.y = 0;
-		}
-		if (this.sprite.collide(walls) && this.sprite.touching.bottom) {
-			this.sprite.velocity.y =0;
-		
-			this.sprite.jumpActive = true;
+		if (this.sprite.collide(groundGroup)) {
+			gravity = 1;
+			if (this.sprite.touching.top){
+			this.sprite.position.y+=200/resolution
+			this.sprite.velocity.y = 1
+			} else {
+				if (this.sprite.touching.bottom){
+					this.sprite.jumpActive = true;
+					this.sprite.velocity.y = 0;
+				}
+			}
 		}
 
-		if (this.sprite.collide(walls) && this.sprite.touching.top) {
-			this.sprite.position.y+=2
-			this.sprite.velocity.y = 0.1
+		if (this.sprite.collide(antiGrav) && this.sprite.touching.bottom) {
+			this.sprite.jumpActive = false;
+			gravity = -1;
 		}
-		if (this.sprite.collide(groundGroup) && this.sprite.touching.top) {
-			this.sprite.position.y+=2
-			this.sprite.velocity.y = 0.1
-		}
-		this.sprite.collide(walls)
 
+
+		if (this.sprite.collide(walls)) {
+			if (gravity == -1){
+				gravity = 1;
+				this.sprite.velocity.y = 0;
+			}
+			if ( this.sprite.touching.top){
+			this.sprite.position.y+=50/resolution
+			this.sprite.velocity.y = 1
+			}
+			if (this.sprite.touching.bottom){
+				this.sprite.velocity.y =0;
+				this.sprite.jumpActive = true;
+			}
+		}
 		this.controls();
 		if (int(this.sprite.velocity.x) === 0) {
 			this.idle();
@@ -71,7 +84,7 @@ class Player {
 		 * always applying gravity
 		 */
 		if (!this.sprite.collide(groundGroup)) {
-			this.sprite.velocity.y += 1
+			this.sprite.velocity.y += gravity
 		}
 
 		/**

@@ -10,9 +10,10 @@ class Level {
 		// Create sprite && set sprite settings
 		GenerateLevel();
 		cleanupLevel();
-		populateLevel();
 	}
 	update() {
+		populateLevel();
+
 		// Call in draw
 		// Call controls && idle animation
 	}
