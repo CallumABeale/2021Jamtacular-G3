@@ -15,7 +15,7 @@ class Player {
 	p5Init(x = width * 0.2, y = height * 0.8) {
 		// Call in setup
 		// Create sprite && set sprite settings
-		this.sprite = createSprite((testSprite.position.x), (testSprite.position.y),CANVASWIDTH/resolution/10,CANVASHEIGHT/resolution/5);
+		this.sprite = createSprite((testSprite.position.x), (testSprite.position.y), CANVASWIDTH / resolution / 5, CANVASHEIGHT / resolution / 1.5);
 		this.sprite.friction = 0.1;
 		// this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
 		this.sprite.debug = true;
@@ -25,12 +25,23 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
-		if (this.sprite.collide(groundGroup) && this.sprite.touching.bottom){
-			this.sprite.jumpActive=true;
+		if (this.sprite.collide(groundGroup) && this.sprite.touching.bottom) {
+			this.sprite.jumpActive = true;
 			this.sprite.velocity.y = 0;
 		}
-		if (this.sprite.collide(groundGroup) && this.sprite.touching.top){
-			this.sprite.velocity.y += .5;
+		if (this.sprite.collide(walls) && this.sprite.touching.bottom) {
+			this.sprite.velocity.y =0;
+		
+			this.sprite.jumpActive = true;
+		}
+
+		if (this.sprite.collide(walls) && this.sprite.touching.top) {
+			this.sprite.position.y+=2
+			this.sprite.velocity.y = 0.1
+		}
+		if (this.sprite.collide(groundGroup) && this.sprite.touching.top) {
+			this.sprite.position.y+=2
+			this.sprite.velocity.y = 0.1
 		}
 		this.sprite.collide(walls)
 
@@ -42,7 +53,7 @@ class Player {
 	idle() {
 		// this.sprite.changeAnimation("standing")
 	}
-	castAbility() {}
+	castAbility() { }
 	cycleAbility() {
 		if (abilityList.includes(activeAbility)) {
 			let index = abilityList.indexOf(activeAbility);
@@ -53,46 +64,46 @@ class Player {
 			}
 		}
 	}
-	useItem() {}
-	cycleItem() {}
+	useItem() { }
+	cycleItem() { }
 	controls() {
 		/**
 		 * always applying gravity
 		 */
-		if (!this.sprite.collide(groundGroup)){
-		this.sprite.velocity.y+=1
+		if (!this.sprite.collide(groundGroup)) {
+			this.sprite.velocity.y += 1
 		}
-		
+
 		/**
 		 * If LEFT_ARROW is pressed, move left
 		 */
-		if (keyIsDown(LEFT_ARROW)&& !this.sprite.touching.left) {
+		if (keyIsDown(LEFT_ARROW) && !this.sprite.touching.left) {
 			// this.sprite.changeAnimation("moving")
 			if (keyIsDown(16)) {
-				this.sprite.velocity.x-=1;
+				this.sprite.velocity.x -= 1;
 			}
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
-			this.sprite.velocity.x-=.5;
+			this.sprite.velocity.x -= .5;
 		}
 		/**
 		 * If RIGHT_ARROW is pressed, move right
 		 * If SHIFT is pressed, it will move twice as fast
 		 */
-		if (keyIsDown(RIGHT_ARROW)&& !this.sprite.touching.right) {
+		if (keyIsDown(RIGHT_ARROW) && !this.sprite.touching.right) {
 			if (keyIsDown(16)) {
-				this.sprite.velocity.x+=1;
+				this.sprite.velocity.x += 1;
 			}
 			// this.sprite.changeAnimation("moving")
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
-			this.sprite.velocity.x+=.5;
+			this.sprite.velocity.x += .5;
 		}
 		/**
 		 * If UP_ARROW is pressed, jump
 		 */
 		if (keyIsDown(32)) {
-			if (this.sprite.jumpActive == true){
-			this.sprite.velocity.y =-30;
-			this.sprite.jumpActive = false;
+			if (this.sprite.jumpActive == true && this.sprite.velocity.y < 2) {
+				this.sprite.velocity.y = -groundGroup[0].height / 1.25;
+				this.sprite.jumpActive = false;
 			}
 		}
 		/**
