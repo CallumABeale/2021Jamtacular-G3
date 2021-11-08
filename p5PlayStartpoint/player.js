@@ -33,7 +33,6 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
-
 		if (this.sprite.collide(groundGroup)) {
 			gravity = 1;
 			if (this.sprite.touching.top) {
@@ -78,8 +77,7 @@ class Player {
 		// this.sprite.changeAnimation("standing")
 	}
 	castAbility() {
-		console.log('casting', this.activeAbility);
-		this.activeAbility.cast();
+		this.activeAbility.cast(this.sprite.position.x, this.sprite.position.y);
 	}
 	cycleAbility() {
 		if (this.abilityList.includes(this.activeAbility)) {
