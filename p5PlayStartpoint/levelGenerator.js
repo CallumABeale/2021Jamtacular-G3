@@ -86,9 +86,11 @@ function createMaze() {
         distChecker = new Group();
         antiGrav = new Group();
         for (let i = 0; i < groundGroup.length; i++) {
-            groundGroup[i].antiGrav = createSprite(groundGroup[i].position.x, groundGroup[i].position.y - CANVASHEIGHT / resolution / 2, groundGroup[i].width/5, groundGroup[i].height/3)
-            groundGroup[i].vertDist = createSprite(groundGroup[i].position.x, groundGroup[i].position.y - CANVASHEIGHT / resolution, 1, 1);
-            groundGroup[i].vertDist.velocity.y = -20
+            groundGroup[i].antiGrav = createSprite(groundGroup[i].position.x, groundGroup[i].position.y - CANVASHEIGHT / resolution / 3.5, groundGroup[i].width/5, groundGroup[i].height/3)
+            groundGroup[i].antiGrav.setCollider('circle',0,0,11);
+
+            groundGroup[i].vertDist = createSprite(groundGroup[i].position.x, groundGroup[i].position.y + CANVASHEIGHT / resolution, 1, 1);
+            groundGroup[i].vertDist.velocity.y = 10
             groundGroup[i].vertDist.life = 40;
             distChecker.add(groundGroup[i].vertDist);
             antiGrav.add(groundGroup[i].antiGrav);
@@ -116,11 +118,10 @@ function cleanupLevel() {
 
 function populateLevel() {
 for (let i = 0 ; i <distChecker.length ; i++){
-    distChecker[i].bounce(groundGroup);
         for (let j = 0 ; j<antiGrav.length ; j++){
-    if (groundGroup[i].vertDist.collide(antiGrav[j])){
+    if (distChecker[i].collide(antiGrav[j])){
         antiGrav[j].remove();
-        groundGroup[i].vertDist.remove();
+        distChecker[i].remove();
         i--;
         j--;
     }

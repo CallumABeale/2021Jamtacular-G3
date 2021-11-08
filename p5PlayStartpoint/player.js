@@ -38,7 +38,7 @@ class Player {
 			}
 		}
 
-		if (this.sprite.collide(antiGrav) && this.sprite.touching.bottom) {
+		if (this.sprite.collide(antiGrav) && keyIsDown(32) && this.sprite.touching.bottom) {
 			this.sprite.jumpActive = false;
 			gravity = -1;
 		}
@@ -47,7 +47,6 @@ class Player {
 		if (this.sprite.collide(walls)) {
 			if (gravity == -1){
 				gravity = 1;
-				this.sprite.velocity.y = 0;
 			}
 			if ( this.sprite.touching.top){
 			this.sprite.position.y+=50/resolution
@@ -90,10 +89,10 @@ class Player {
 		/**
 		 * If LEFT_ARROW is pressed, move left
 		 */
-		if (keyIsDown(LEFT_ARROW) && !this.sprite.touching.left) {
+		if (keyIsDown(LEFT_ARROW)) {
 			// this.sprite.changeAnimation("moving")
 			if (keyIsDown(16)) {
-				this.sprite.velocity.x -= 1;
+				this.sprite.velocity.x -= 0.5;
 			}
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
 			this.sprite.velocity.x -= .5;
@@ -102,9 +101,9 @@ class Player {
 		 * If RIGHT_ARROW is pressed, move right
 		 * If SHIFT is pressed, it will move twice as fast
 		 */
-		if (keyIsDown(RIGHT_ARROW) && !this.sprite.touching.right) {
+		if (keyIsDown(RIGHT_ARROW)) {
 			if (keyIsDown(16)) {
-				this.sprite.velocity.x += 1;
+				this.sprite.velocity.x += 0.5;
 			}
 			// this.sprite.changeAnimation("moving")
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
@@ -113,7 +112,7 @@ class Player {
 		/**
 		 * If UP_ARROW is pressed, jump
 		 */
-		if (keyIsDown(32)) {
+		if (keyIsDown(32) && !this.sprite.collide(antiGrav) && !this.sprite.touching.bottom) {
 			if (this.sprite.jumpActive == true && this.sprite.velocity.y < 2) {
 				this.sprite.velocity.y = -groundGroup[0].height / 1.25;
 				this.sprite.jumpActive = false;
