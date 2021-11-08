@@ -25,13 +25,13 @@ function GenerateLevel() {
         }
     }
     current = grid[0][0]
-    testSprite = createSprite((current.x + 0.5) * CANVASWIDTH / resolution * 2, (current.y +0.5) * CANVASHEIGHT / resolution, 25, 25)
+    testSprite = createSprite((current.x + 0.5) * CANVASWIDTH*3 / resolution, (current.y +0.5) * CANVASHEIGHT / resolution *3, 25, 25)
 
     console.log(current)
     maxStack = 0;
 
     createMaze();
-    endSprite = createSprite((endPos.x + 0.5) * CANVASWIDTH / resolution * 2, (endPos.y + .5) * CANVASHEIGHT / resolution, 25, 25)
+    endSprite = createSprite((endPos.x + 0.5) * CANVASWIDTH / resolution * 3, (endPos.y + .5) * CANVASHEIGHT / resolution * 3, 25, 25)
 
 
 }
@@ -139,12 +139,12 @@ class Cell {
             ground.immovable = true;
             ground.debug = true;
             ground.antiGrav = createSprite(ground.position.x, ground.position.y + (CANVASHEIGHT / resolution), ground.width/5, ground.height/5)
-            ground.antiGrav.setCollider('circle',0,0,11);
+            ground.antiGrav.setCollider('circle',0,0,ground.antiGrav.height/1.5);
             ground.antiGrav.velocity.y = 10;
 
             ground.vertDist = createSprite(ground.position.x, ground.position.y + (CANVASHEIGHT / resolution)-40, 1, 1);
             ground.vertDist.velocity.y = 10
-            ground.vertDist.life = resolution*6;
+            ground.vertDist.life = 600/resolution;
             distChecker.add(ground.vertDist);
             antiGrav.add(ground.antiGrav);
 
