@@ -1,7 +1,7 @@
 let groundGroup;
 let walls;
 let current;
-var resolution = 15;
+var resolution = 10;
 let grid = [];
 let stack = [];
 let maxStack = 0;
@@ -13,6 +13,8 @@ let antiGrav;
 function GenerateLevel() {
     walls = new Group();
     groundGroup = new Group();
+    distChecker = new Group();
+    antiGrav = new Group();
     levelGenerated = false;
 
     for (let y = 0; y < resolution; y++) {
@@ -22,14 +24,14 @@ function GenerateLevel() {
             grid[y][x] = cell;
         }
     }
-    current = grid[int(random(grid.length))][int(random(grid[0].length))]
-    testSprite = createSprite((current.x + 0.5) * CANVASWIDTH / resolution, (current.y + .5) * CANVASHEIGHT / resolution, 25, 25)
+    current = grid[0][0]
+    testSprite = createSprite((current.x + 0.5) * CANVASWIDTH / resolution * 2, (current.y +0.5) * CANVASHEIGHT / resolution, 25, 25)
 
     console.log(current)
     maxStack = 0;
 
     createMaze();
-    endSprite = createSprite((endPos.x + 0.5) * CANVASWIDTH / resolution, (endPos.y + .5) * CANVASHEIGHT / resolution, 25, 25)
+    endSprite = createSprite((endPos.x + 0.5) * CANVASWIDTH / resolution * 2, (endPos.y + .5) * CANVASHEIGHT / resolution, 25, 25)
 
 
 }
@@ -49,7 +51,7 @@ function createMaze() {
 
         //step 2
         stack.push(current);
-        if (stack.length > maxStack) {
+        if (maxStack < stack.length) {
             maxStack = stack.length;
             endPos = createVector(stack[maxStack - 1].x, stack[maxStack - 1].y)
         }
@@ -82,20 +84,6 @@ function createMaze() {
     }
     if (!levelGenerated) {
         createMaze();
-    } else {
-        distChecker = new Group();
-        antiGrav = new Group();
-        for (let i = 0; i < groundGroup.length; i++) {
-            groundGroup[i].antiGrav = createSprite(groundGroup[i].position.x, groundGroup[i].position.y + CANVASHEIGHT / resolution+resolution, groundGroup[i].width/5, groundGroup[i].height/5)
-            groundGroup[i].antiGrav.setCollider('circle',0,0,11);
-            groundGroup[i].antiGrav.velocity.y = 10;
-
-            groundGroup[i].vertDist = createSprite(groundGroup[i].position.x, groundGroup[i].position.y + CANVASHEIGHT / resolution, 1, 1);
-            groundGroup[i].vertDist.velocity.y = 10
-            groundGroup[i].vertDist.life = 40;
-            distChecker.add(groundGroup[i].vertDist);
-            antiGrav.add(groundGroup[i].antiGrav);
-        }
     }
 }
 function removeWalls(a, b) {
@@ -118,18 +106,15 @@ function cleanupLevel() {
 }
 
 function populateLevel() {
-    for (let j = 0 ; j<antiGrav.length ; j++){
-        if (antiGrav[j].velocity.y > 0 && antiGrav[j].collide(groundGroup)){
-            antiGrav[j].velocity.y = 0
-            antiGrav[j].position.y += CANVASHEIGHT/resolution/4;
+    for (let j = 0 ; j<groundGroup.length ; j++){
+        if (groundGroup[j].antiGrav && groundGroup[j].antiGrav.velocity.y > 0 && groundGroup[j].antiGrav.collide(groundGroup)){
+            groundGroup[j].antiGrav.velocity.y = 0
+            groundGroup[j].antiGrav.position.y += CANVASHEIGHT/resolution/6;
         }
-        for (let i = 0 ; i <distChecker.length ; i++){
-    if (distChecker[i].collide(antiGrav[j])){
-        antiGrav[j].remove();
-        distChecker[i].remove();
-        i--;
+    if (groundGroup[j].vertDist && groundGroup[j].vertDist.collide(groundGroup[j].antiGrav)){
+        groundGroup[j].antiGrav.remove();
+        groundGroup[j].vertDist.remove();
         j--;
-    }
 }
 }
 
@@ -153,7 +138,18 @@ class Cell {
             let ground = createSprite(int((this.x + 0.5) * this.w * 1.5), int((this.y) * this.h * 1.5), int(this.w * 1.5 + CANVASWIDTH / resolution / 2.8), int(CANVASHEIGHT / resolution / 1.25));
             ground.immovable = true;
             ground.debug = true;
+            ground.antiGrav = createSprite(ground.position.x, ground.position.y + (CANVASHEIGHT / resolution), ground.width/5, ground.height/5)
+            ground.antiGrav.setCollider('circle',0,0,11);
+            ground.antiGrav.velocity.y = 10;
+
+            ground.vertDist = createSprite(ground.position.x, ground.position.y + (CANVASHEIGHT / resolution)-40, 1, 1);
+            ground.vertDist.velocity.y = 10
+            ground.vertDist.life = resolution*6;
+            distChecker.add(ground.vertDist);
+            antiGrav.add(ground.antiGrav);
+
             groundGroup.add(ground)
+
         }
         if (this.wall[1]) {
             line(xPos + this.w, yPos, xPos + this.w, yPos + this.h)
