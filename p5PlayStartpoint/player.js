@@ -3,13 +3,13 @@ class Player {
 		this.sprite;
 		this.animations = {};
 		this.health = health;
-		this.activeAbility;
-		this.abillityList = [];
-		this.activeItem;
-		this.itemList = [];
 		this.lightning = new Ability('lightning');
 		this.freeze = new Ability('freeze');
 		this.telekenises = new Ability('telekenises');
+		this.abilityList = [this.lightning, this.freeze, this.telekenises];
+		this.activeAbility = this.lightning;
+		this.itemList = [];
+		this.activeItem;
 	}
 	p5Load() {
 		// Call in preload
@@ -33,6 +33,7 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
+
 		if (this.sprite.collide(groundGroup)) {
 			gravity = 1;
 			if (this.sprite.touching.top) {
@@ -77,17 +78,21 @@ class Player {
 		// this.sprite.changeAnimation("standing")
 	}
 	castAbility() {
-		this.activeAbility.cast();
+		console.log('casting', this.activeAbility);
+		// this.activeAbility.cast();
 	}
 	cycleAbility() {
-		if (abilityList.includes(activeAbility)) {
-			let index = abilityList.indexOf(activeAbility);
-			if (index === abilityList.length - 1) {
-				activeAbility = abilityList[0];
+		console.log('cycleAbility - abilityList', this.abilityList);
+		console.log('cycleAbility - activeAbility', this.activeAbility);
+		if (this.abilityList.includes(this.activeAbility)) {
+			let index = this.abilityList.indexOf(this.activeAbility);
+			if (index === this.abilityList.length - 1) {
+				this.activeAbility = this.abilityList[0];
 			} else {
-				activeAbility = abilityList[index + 1];
+				this.activeAbility = this.abilityList[index + 1];
 			}
 		}
+		console.log('setting', this.activeAbility);
 	}
 	useItem() {}
 	cycleItem() {}
@@ -138,22 +143,22 @@ class Player {
 		/**
 		 * If Q is pressed, use ability
 		 */
-		if (keyIsDown(81)) {
+		if (keyWentDown(81)) {
 			this.castAbility();
 		}
 		/**
 		 * If E is pressed, use item
 		 */
-		if (keyIsDown(69)) {
+		if (keyWentDown(69)) {
 			this.useItem();
 		}
 		/**
 		 * If R is pressed, cycle ability
 		 */
-		if (keyIsDown(82)) {
+		if (keyWentDown(82)) {
 			this.cycleAbility();
 		}
-		if (keyIsDown(70)) {
+		if (keyWentDown(70)) {
 			this.cycleItem();
 		}
 	}
