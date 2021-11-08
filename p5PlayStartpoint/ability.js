@@ -31,16 +31,28 @@ class Ability {
 	}
 	lightning(x, y) {
 		this.sprite = createSprite(x, y, 250, 30);
-		setTimeout(this.kill(), 1000);
+		this.sprite.life = 60;
+		if (this.sprite.life > 0) {
+			this.sprite.life -= 1;
+		}
 	}
 	freeze(x, y) {
 		this.sprite = createSprite(x, y, 10, 10);
+		this.sprite.life = 60;
+		if (this.sprite.life > 0) {
+			this.sprite.life -= 1;
+		}
 	}
 	telekenisis(x, y) {
 		this.sprite = createSprite(x, y, 10, 10);
+		this.sprite.life = 60;
+		if (this.sprite.life > 0) {
+			this.sprite.life -= 1;
+		}
 	}
-	kill() {
-		this.sprite.removed = true;
-		console.log('sprite killed!');
+	kill(sprite) {
+		setTimeout(function () {
+			this.sprite.remove(sprite);
+		}, 1000);
 	}
 }
