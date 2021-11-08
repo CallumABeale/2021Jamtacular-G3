@@ -50,9 +50,4 @@ class Ability {
 			this.sprite.life -= 1;
 		}
 	}
-	kill(sprite) {
-		setTimeout(function () {
-			this.sprite.remove(sprite);
-		}, 1000);
-	}
 }
