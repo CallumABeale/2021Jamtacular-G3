@@ -18,7 +18,29 @@ class Ability {
 		// Call in draw
 		// Call controls && idle animation
 	}
-	cast() {
-		console.log('ability cast!', this.Ability);
+	cast(playerX, playerY) {
+		if (this.active === 'lightning') {
+			this.lightning(playerX, playerY);
+		}
+		if (this.active === 'freeze') {
+			this.freeze(playerX, playerY);
+		}
+		if (this.active === 'telekenesis') {
+			this.telekenisis(playerX, playerY);
+		}
+	}
+	lightning(x, y) {
+		this.sprite = createSprite(x, y, 250, 30);
+		setTimeout(this.kill(), 1000);
+	}
+	freeze(x, y) {
+		this.sprite = createSprite(x, y, 10, 10);
+	}
+	telekenisis(x, y) {
+		this.sprite = createSprite(x, y, 10, 10);
+	}
+	kill() {
+		this.sprite.removed = true;
+		console.log('sprite killed!');
 	}
 }
