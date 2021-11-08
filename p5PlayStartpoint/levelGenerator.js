@@ -86,8 +86,9 @@ function createMaze() {
         distChecker = new Group();
         antiGrav = new Group();
         for (let i = 0; i < groundGroup.length; i++) {
-            groundGroup[i].antiGrav = createSprite(groundGroup[i].position.x, groundGroup[i].position.y - CANVASHEIGHT / resolution / 3.5, groundGroup[i].width/5, groundGroup[i].height/3)
+            groundGroup[i].antiGrav = createSprite(groundGroup[i].position.x, groundGroup[i].position.y + CANVASHEIGHT / resolution+resolution, groundGroup[i].width/5, groundGroup[i].height/5)
             groundGroup[i].antiGrav.setCollider('circle',0,0,11);
+            groundGroup[i].antiGrav.velocity.y = 10;
 
             groundGroup[i].vertDist = createSprite(groundGroup[i].position.x, groundGroup[i].position.y + CANVASHEIGHT / resolution, 1, 1);
             groundGroup[i].vertDist.velocity.y = 10
@@ -117,8 +118,12 @@ function cleanupLevel() {
 }
 
 function populateLevel() {
-for (let i = 0 ; i <distChecker.length ; i++){
-        for (let j = 0 ; j<antiGrav.length ; j++){
+    for (let j = 0 ; j<antiGrav.length ; j++){
+        if (antiGrav[j].velocity.y > 0 && antiGrav[j].collide(groundGroup)){
+            antiGrav[j].velocity.y = 0
+            antiGrav[j].position.y += CANVASHEIGHT/resolution/4;
+        }
+        for (let i = 0 ; i <distChecker.length ; i++){
     if (distChecker[i].collide(antiGrav[j])){
         antiGrav[j].remove();
         distChecker[i].remove();
@@ -145,14 +150,14 @@ class Cell {
         strokeWeight(1)
         if (this.wall[0]) {
             line(xPos, yPos, xPos + this.w, yPos)
-            let ground = createSprite(int((this.x + 0.5) * this.w * 1.5), int((this.y) * this.h * 1.5), int(this.w * 1.5 + CANVASWIDTH / resolution / 2.5), int(CANVASHEIGHT / resolution / 1.25));
+            let ground = createSprite(int((this.x + 0.5) * this.w * 1.5), int((this.y) * this.h * 1.5), int(this.w * 1.5 + CANVASWIDTH / resolution / 2.8), int(CANVASHEIGHT / resolution / 1.25));
             ground.immovable = true;
             ground.debug = true;
             groundGroup.add(ground)
         }
         if (this.wall[1]) {
             line(xPos + this.w, yPos, xPos + this.w, yPos + this.h)
-            let wall = createSprite((this.x + 1) * this.w * 1.5, (this.y + 0.5) * this.h * 1.5, CANVASWIDTH / resolution / 2.5 + 20, this.h * 1.9)
+            let wall = createSprite((this.x + 1) * this.w * 1.5, (this.y + 0.5) * this.h * 1.5, CANVASWIDTH / resolution / 2.8, this.h * 1.9)
             wall.immovable = true;
             wall.debug = true;
             walls.add(wall)
