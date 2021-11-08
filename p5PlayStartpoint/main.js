@@ -25,6 +25,7 @@ function draw() {
         }
         testPlayer.update();
         testLevel.update();
+        testPlayer.activeAbility.update();
 
     drawSprites();
 }

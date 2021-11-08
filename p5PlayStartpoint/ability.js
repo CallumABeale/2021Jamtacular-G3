@@ -17,6 +17,10 @@ class Ability {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
+		if (this.sprite){
+			this.sprite.position.x = testPlayer.sprite.position.x;
+			this.sprite.position.y = testPlayer.sprite.position.y;
+		}
 	}
 	cast(playerX, playerY) {
 		if (this.active === 'lightning') {
@@ -31,16 +35,12 @@ class Ability {
 	}
 	lightning(x, y) {
 		this.sprite = createSprite(x, y, 250, 30);
-		setTimeout(this.kill(), 1000);
+		this.sprite.life =30;
 	}
 	freeze(x, y) {
 		this.sprite = createSprite(x, y, 10, 10);
 	}
 	telekenisis(x, y) {
 		this.sprite = createSprite(x, y, 10, 10);
-	}
-	kill() {
-		this.sprite.removed = true;
-		console.log('sprite killed!');
 	}
 }
