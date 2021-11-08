@@ -25,7 +25,7 @@ class Ability {
 		if (this.active === 'freeze') {
 			this.freeze(playerX, playerY);
 		}
-		if (this.active === 'telekenesis') {
+		if (this.active === 'telekenises') {
 			this.telekenisis(playerX, playerY);
 		}
 	}
@@ -44,7 +44,7 @@ class Ability {
 		}
 	}
 	telekenisis(x, y) {
-		this.sprite = createSprite(x, y, 10, 10);
+		this.sprite = createSprite(x, y, 10, 250);
 		this.sprite.life = 60;
 		if (this.sprite.life > 0) {
 			this.sprite.life -= 1;
