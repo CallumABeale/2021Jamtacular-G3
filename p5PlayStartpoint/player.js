@@ -76,7 +76,9 @@ class Player {
 	idle() {
 		// this.sprite.changeAnimation("standing")
 	}
-	castAbility() {}
+	castAbility() {
+		this.activeAbility.cast();
+	}
 	cycleAbility() {
 		if (abilityList.includes(activeAbility)) {
 			let index = abilityList.indexOf(activeAbility);
