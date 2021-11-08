@@ -19,6 +19,6 @@ class Ability {
 		// Call controls && idle animation
 	}
 	cast() {
-		this.update();
+		console.log('ability cast!', this.Ability);
 	}
 }

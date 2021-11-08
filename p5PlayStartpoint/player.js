@@ -79,11 +79,9 @@ class Player {
 	}
 	castAbility() {
 		console.log('casting', this.activeAbility);
-		// this.activeAbility.cast();
+		this.activeAbility.cast();
 	}
 	cycleAbility() {
-		console.log('cycleAbility - abilityList', this.abilityList);
-		console.log('cycleAbility - activeAbility', this.activeAbility);
 		if (this.abilityList.includes(this.activeAbility)) {
 			let index = this.abilityList.indexOf(this.activeAbility);
 			if (index === this.abilityList.length - 1) {
@@ -92,7 +90,6 @@ class Player {
 				this.activeAbility = this.abilityList[index + 1];
 			}
 		}
-		console.log('setting', this.activeAbility);
 	}
 	useItem() {}
 	cycleItem() {}
