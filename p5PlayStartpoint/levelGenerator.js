@@ -1,7 +1,7 @@
 let groundGroup;
 let walls;
 let current;
-var resolution = 10;
+var resolution = 15;
 let grid = [];
 let stack = [];
 let maxStack = 0;
