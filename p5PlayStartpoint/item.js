@@ -1,8 +1,9 @@
 class Item {
-	constructor() {
+	constructor(active, effect) {
 		this.sprite;
 		this.animations = {};
-		this.effect;
+		this.active = active;
+		this.effect = effect;
 	}
 	p5Load() {
 		// Call in preload

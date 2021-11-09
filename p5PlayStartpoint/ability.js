@@ -17,17 +17,18 @@ class Ability {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
-		if (this.sprite){
-			if (testPlayer.sprite.getDirection() < 90){
-			this.sprite.position.x = testPlayer.sprite.position.x + 100 -this.sprite.life*2;
-			this.sprite.position.y = testPlayer.sprite.position.y;
-		}
-		else {
-			this.sprite.position.x = testPlayer.sprite.position.x - 100 + this.sprite.life*2;
-			this.sprite.position.y = testPlayer.sprite.position.y;
+		if (this.sprite) {
+			if (testPlayer.sprite.getDirection() < 90) {
+				this.sprite.position.x =
+					testPlayer.sprite.position.x + 100 - this.sprite.life * 2;
+				this.sprite.position.y = testPlayer.sprite.position.y;
+			} else {
+				this.sprite.position.x =
+					testPlayer.sprite.position.x - 100 + this.sprite.life * 2;
+				this.sprite.position.y = testPlayer.sprite.position.y;
+			}
 		}
 	}
-}
 	cast(playerX, playerY) {
 		if (this.active === 'lightning') {
 			this.lightning(playerX, playerY);
@@ -41,8 +42,8 @@ class Ability {
 	}
 	lightning(x, y) {
 		this.sprite = createSprite(x, y, 250, 30);
-		this.sprite.addAnimation('fire',lightningAnim)
-		this.sprite.scale = 0.2
+		this.sprite.addAnimation('fire', lightningAnim);
+		this.sprite.scale = 0.2;
 		this.sprite.life = 20;
 		if (this.sprite.life > 0) {
 			this.sprite.life -= 1;
