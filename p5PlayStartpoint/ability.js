@@ -59,6 +59,9 @@ class Ability {
 	telekenisis(x, y) {
 		this.sprite = createSprite(x, y, 10, 250);
 		this.sprite.life = 60;
+		// if (this.sprite.displace(enemyGroup)) {
+		// 	enemyGroup.velocity == player velocity
+		// }
 		if (this.sprite.life > 0) {
 			this.sprite.life -= 1;
 		}
