@@ -33,6 +33,10 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
+		if (keyIsDown(90) && camera.zoom > zoomLevel/resolution*3){
+			camera.zoom*=0.95
+		}
+
 		if (this.sprite.collide(groundGroup)) {
 			gravity = 1;
 			if (this.sprite.touching.top) {
@@ -104,9 +108,6 @@ class Player {
 		 */
 		if (keyIsDown(LEFT_ARROW)) {
 			// this.sprite.changeAnimation("moving")
-			if (keyIsDown(16)) {
-				this.sprite.velocity.x -= 0.5;
-			}
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
 			this.sprite.velocity.x -= 0.5;
 		}
@@ -115,9 +116,6 @@ class Player {
 		 * If SHIFT is pressed, it will move twice as fast
 		 */
 		if (keyIsDown(RIGHT_ARROW)) {
-			if (keyIsDown(16)) {
-				this.sprite.velocity.x += 0.5;
-			}
 			// this.sprite.changeAnimation("moving")
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
 			this.sprite.velocity.x += 0.5;
