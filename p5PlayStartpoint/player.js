@@ -50,15 +50,7 @@ class Player {
 			}
 		}
 
-		if (
-			this.sprite.collide(antiGrav) &&
-			keyIsDown(32) &&
-			this.sprite.touching.bottom
-		) {
-			this.sprite.jumpActive = false;
-			gravity = -1;
-		}
-
+		
 		if (this.sprite.collide(walls)) {
 			if (gravity == -1) {
 				gravity = 1;
@@ -121,17 +113,29 @@ class Player {
 			this.sprite.velocity.x += 0.5;
 		}
 		/**
-		 * If UP_ARROW is pressed, jump
+		 * If UP_ARROW is pressed on a antigrav pad, reverse gravity, 
+		 * else jump
 		 */
-		if (
+		 if (
+			this.sprite.collide(antiGrav) &&
 			keyIsDown(32) &&
-			!this.sprite.collide(antiGrav) &&
-			!this.sprite.touching.bottom
+			this.sprite.touching.bottom
 		) {
-			if (this.sprite.jumpActive == true && this.sprite.velocity.y < 2) {
-				this.sprite.velocity.y = -groundGroup[0].height / 1.25;
-				this.sprite.jumpActive = false;
+			this.sprite.jumpActive = false;
+			gravity = -1;
+		}  else {
+			if (
+				keyIsDown(32) &&
+				!this.sprite.collide(antiGrav) &&
+				!this.sprite.touching.bottom
+			) {
+				if (this.sprite.jumpActive == true && this.sprite.velocity.y < 2) {
+					this.sprite.velocity.y = -groundGroup[0].height / 1.25;
+					this.sprite.jumpActive = false;
+					this.sprite.limitSpeed = groundGroup[0].height / 1.25
+				}
 			}
+
 		}
 		/**
 		 * If Q is pressed, use ability
