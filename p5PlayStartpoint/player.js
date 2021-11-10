@@ -1,9 +1,11 @@
 class Player {
-	constructor(health, mana) {
+	constructor(health, maxHealth, mana, maxMana) {
 		this.sprite;
 		this.animations = {};
 		this.health = health;
+		this.maxHealth = maxHealth;
 		this.mana = mana;
+		this.maxMana = maxMana;
 		this.lightning = new Ability('lightning');
 		this.freeze = new Ability('freeze');
 		this.telekenises = new Ability('telekenises');
