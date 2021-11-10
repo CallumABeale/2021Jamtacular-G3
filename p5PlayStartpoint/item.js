@@ -33,9 +33,33 @@ class Item {
 			this.maxManaPotion();
 		}
 	}
-	healthPotion() {}
-	maxHealthPotion() {}
-	manaPotion() {}
-	maxManaPotion() {}
+	healthPotion() {
+		const restoreAmount = 30;
+		if (testPlayer.health < testPlayer.maxHealth) {
+			if (testPlayer.health + restoreAmount > testPlayer.maxHealth) {
+				testPlayer.health = testPlayer.maxHealth;
+			} else {
+				testPlayer.health += restoreAmount;
+			}
+		}
+	}
+	maxHealthPotion() {
+		const maxHealthAdd = 50;
+		testPlayer.healh += maxHealthAdd;
+	}
+	manaPotion() {
+		const restoreAmount = 30;
+		if (testPlayer.mana < testPlayer.maxMana) {
+			if (testPlayer.mana + restoreAmount > testPlayer.maxHealth) {
+				testPlayer.mana = testPlayer.maxMana;
+			} else {
+				testPlayer.mana += restoreAmount;
+			}
+		}
+	}
+	maxManaPotion() {
+		const maxManaAdd = 50;
+		testPlayer.mana += maxManaAdd;
+	}
 	itemGranter() {}
 }
