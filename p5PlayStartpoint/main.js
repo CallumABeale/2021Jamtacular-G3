@@ -30,3 +30,6 @@ function draw() {
 
     drawSprites();
 }
+function mousePressed(){
+testPlayer.sprite.position.x += groundGroup[0].width
+}

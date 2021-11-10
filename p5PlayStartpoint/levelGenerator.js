@@ -9,6 +9,14 @@ let endPos;
 let distChecker;
 let gravity = 1;
 let antiGrav;
+let wallTester;
+let dropTesters;
+let spikePits;
+let chestTesters1;
+let chestTesters2;
+let gameChests;
+let bouncingBridges;
+let activeGrav;
 
 function GenerateLevel() {
     walls = new Group();
@@ -16,6 +24,14 @@ function GenerateLevel() {
     distChecker = new Group();
     antiGrav = new Group();
     levelGenerated = false;
+    wallTester = new Group();
+    dropTesters = new Group();
+    spikePits = new Group();
+    chestTesters1 = new Group();
+    chestTesters2 = new Group();
+    gameChests = new Group();
+    bouncingBridges = new Group();
+    activeGrav = new Group();
 
     for (let y = 0; y < resolution; y++) {
         grid[y] = [];
@@ -107,16 +123,98 @@ function cleanupLevel() {
 
 function populateLevel() {
     for (let j = 0 ; j<groundGroup.length ; j++){
+        for (let i = 0 ; i<bouncingBridges.length ; i++){
+        if (groundGroup[j].antiGrav && groundGroup[j].antiGrav.overlap(bouncingBridges[i])){
+            activeGrav.add(bouncingBridges[i]);
+            groundGroup[j].antiGrav.remove();
+        } 
+    }
+        if (groundGroup[j].antiGrav && groundGroup[j].antiGrav.collide(spikePits)){
+            groundGroup[j].antiGrav.position.y-= walls[0].height*2/3
+        } else {
         if (groundGroup[j].antiGrav && groundGroup[j].antiGrav.velocity.y > 0 && groundGroup[j].antiGrav.collide(groundGroup)){
             groundGroup[j].antiGrav.velocity.y = 0
             groundGroup[j].antiGrav.position.y += CANVASHEIGHT/resolution/6;
         }
+    }
     if (groundGroup[j].vertDist && groundGroup[j].vertDist.collide(groundGroup[j].antiGrav)){
         groundGroup[j].antiGrav.remove();
         groundGroup[j].vertDist.remove();
         j--;
 }
 }
+    for (let i = 0 ; i<wallTester.length ; i++){
+        if (wallTester[i] && wallTester[i].collide(wallTester)){
+            dropTester = createSprite(wallTester[i].position.x,wallTester[i].position.y,10,10);
+                dropTester.velocity.y = 2
+                dropTester.life = 60
+                dropTester.done = false;
+                wallTester[i].remove();
+                dropTesters.add(dropTester)
+                i--;
+        }
+    }
+        for (let i = 0 ; i<dropTesters.length ; i++){
+            if (dropTesters[i] && dropTesters[i].collide(groundGroup) && !dropTesters[i].done){
+                pitSpikes = createSprite(dropTesters[i].position.x,dropTesters[i].position.y - walls[0].height/5,groundGroup[0].width-walls[0].width*2,walls[0].height/3);
+                pitSpikes.velocity.y = 1;
+                dropTesters[i].done = true;
+                bouncingBridge = createSprite(pitSpikes.position.x,pitSpikes.position.y- walls[0].height/2.2,groundGroup[0].width/4,groundGroup[0].height/5);
+                bouncingBridge.velocity.x = 1
+                bouncingBridges.add(bouncingBridge);
+                spikePits.add(pitSpikes);
+            }
+        }
+
+    for (let i = 0 ; i<bouncingBridges.length ; i++){
+        if (bouncingBridges[i].collide(walls)){
+            bouncingBridges[i].velocity.x *=-1;
+                if (bouncingBridges[i].collide(testPlayer.sprite)){
+                    testPlayer.sprite.velocity.x=bouncingBridges[i].velocity.x;
+
+                }
+        }
+    }
+        for (let i = 0 ; i<spikePits.length ; i++){
+            spikePits.collide(groundGroup);
+            spikePits.collide(walls);
+        }
+        for (let i = 0 ; i<chestTesters1.length ; i++){
+            if (chestTesters1[i] && chestTesters1[i].collide(chestTesters1)){
+                chestTest2R = createSprite(chestTesters1[i].position.x, chestTesters1[i].position.y, 10,10);
+                chestTest2R.velocity.x = 5;
+                chestTest2R.life = 40;
+                chestTest2R.dir = 'R';
+                chestTesters2.add(chestTest2R);
+                chestTest2L = createSprite(chestTesters1[i].position.x, chestTesters1[i].position.y, 10,10);
+                chestTest2L.velocity.x = -5;
+                chestTest2L.life = 40;
+                chestTest2L.dir = 'L';
+                chestTesters2.add(chestTest2L);
+            
+                chestTesters1[i].remove();
+                i--;
+
+            }
+        }
+        for (let i = 0 ; i<chestTesters2.length ; i++){
+            if (chestTesters2[i] && chestTesters2[i].collide(walls)){
+                if (chestTesters2[i].dir == 'R'){
+                    gameChest = createSprite(chestTesters2[i].position.x-walls[0].width/2,chestTesters2[i].position.y,walls[0].width,groundGroup[0].height);
+                } else{
+                    gameChest = createSprite(chestTesters2[i].position.x+walls[0].width/2,chestTesters2[i].position.y,walls[0].width,groundGroup[0].height);
+                }
+                chestTesters2[i].remove();
+                i--;
+                gameChest.velocity.y = 1
+                gameChests.add(gameChest);
+            }
+        }
+        for (let i = 0 ; i<gameChests.length ; i++){
+            if (gameChests[i]){
+                gameChests[i].collide(groundGroup);
+            }
+        }
 
 }
 
@@ -124,7 +222,7 @@ class Cell {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.w = CANVASWIDTH / resolution * 2;
+        this.w = CANVASWIDTH / resolution *2;
         this.h = CANVASHEIGHT / resolution * 2;
         this.wall = [true, true];
     }
@@ -138,8 +236,7 @@ class Cell {
             let ground = createSprite(int((this.x + 0.5) * this.w * 1.5), int((this.y) * this.h * 1.5), int(this.w * 1.5 + CANVASWIDTH / resolution / 2.8), int(CANVASHEIGHT / resolution / 1.25));
             ground.immovable = true;
             ground.debug = true;
-            ground.antiGrav = createSprite(ground.position.x, ground.position.y + (CANVASHEIGHT / resolution), ground.width/5, ground.height/5)
-            ground.antiGrav.setCollider('circle',0,0,ground.antiGrav.height/1.5);
+            ground.antiGrav = createSprite(ground.position.x, ground.position.y + (CANVASHEIGHT / resolution), ground.width/5, ground.height/3)
             ground.antiGrav.velocity.y = 10;
 
             ground.vertDist = createSprite(ground.position.x, ground.position.y + (CANVASHEIGHT / resolution)-40, 1, 1);
@@ -147,8 +244,16 @@ class Cell {
             ground.vertDist.life = 600/resolution;
             distChecker.add(ground.vertDist);
             antiGrav.add(ground.antiGrav);
+            groundGroup.add(ground);
 
-            groundGroup.add(ground)
+            ground.chestTesterU = createSprite(ground.position.x,ground.position.y-10,10,10);
+            ground.chestTesterU.velocity.y = -5
+            ground.chestTesterU.life = 30
+            chestTesters1.add(ground.chestTesterU)
+            ground.chestTesterD = createSprite(ground.position.x,ground.position.y+10,10,10);
+            ground.chestTesterD.velocity.y = 5
+            ground.chestTesterD.life = 30
+            chestTesters1.add(ground.chestTesterD)
 
         }
         if (this.wall[1]) {
@@ -156,6 +261,14 @@ class Cell {
             let wall = createSprite((this.x + 1) * this.w * 1.5, (this.y + 0.5) * this.h * 1.5, CANVASWIDTH / resolution / 2.8, this.h * 1.9)
             wall.immovable = true;
             wall.debug = true;
+            wall.typeTestR = createSprite((this.x + 1) * this.w * 1.5 + 20, (this.y + 0.5) * this.h * 1.5, 10,10)
+            wall.typeTestR.velocity.x = 5;
+            wall.typeTestR.life = 30;
+            wallTester.add(wall.typeTestR)
+            wall.typeTestL = createSprite((this.x + 1) * this.w * 1.5 -20, (this.y + 0.5) * this.h * 1.5, 10,10)
+            wall.typeTestL.velocity.x = -5
+            wall.typeTestL.life = 30;
+            wallTester.add(wall.typeTestL)
             walls.add(wall)
         }
 
