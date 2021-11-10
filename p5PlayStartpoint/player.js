@@ -1,8 +1,9 @@
 class Player {
-	constructor(health) {
+	constructor(health, mana) {
 		this.sprite;
 		this.animations = {};
 		this.health = health;
+		this.mana = mana;
 		this.lightning = new Ability('lightning');
 		this.freeze = new Ability('freeze');
 		this.telekenises = new Ability('telekenises');
@@ -33,8 +34,8 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
-		if (keyIsDown(90) && camera.zoom > zoomLevel/resolution*3){
-			camera.zoom*=0.95
+		if (keyIsDown(90) && camera.zoom > (zoomLevel / resolution) * 3) {
+			camera.zoom *= 0.95;
 		}
 
 		if (this.sprite.collide(groundGroup)) {
@@ -50,7 +51,6 @@ class Player {
 			}
 		}
 
-		
 		if (this.sprite.collide(walls)) {
 			if (gravity == -1) {
 				gravity = 1;
@@ -113,17 +113,17 @@ class Player {
 			this.sprite.velocity.x += 0.5;
 		}
 		/**
-		 * If UP_ARROW is pressed on a antigrav pad, reverse gravity, 
+		 * If UP_ARROW is pressed on a antigrav pad, reverse gravity,
 		 * else jump
 		 */
-		 if (
+		if (
 			this.sprite.collide(antiGrav) &&
 			keyIsDown(32) &&
 			this.sprite.touching.bottom
 		) {
 			this.sprite.jumpActive = false;
 			gravity = -1;
-		}  else {
+		} else {
 			if (
 				keyIsDown(32) &&
 				!this.sprite.collide(antiGrav) &&
@@ -132,10 +132,9 @@ class Player {
 				if (this.sprite.jumpActive == true && this.sprite.velocity.y < 2) {
 					this.sprite.velocity.y = -groundGroup[0].height / 1.25;
 					this.sprite.jumpActive = false;
-					this.sprite.limitSpeed = groundGroup[0].height / 1.25
+					this.sprite.limitSpeed = groundGroup[0].height / 1.25;
 				}
 			}
-
 		}
 		/**
 		 * If Q is pressed, use ability

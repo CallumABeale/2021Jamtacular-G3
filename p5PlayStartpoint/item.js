@@ -17,4 +17,25 @@ class Item {
 		// Call in draw
 		// Call controls && idle animation
 	}
+	use() {
+		// Call this function to use an item
+		if (this.active === 'newItem') {
+			this.itemGranter();
+		}
+		if (this.active === 'hpPotion') {
+			this.healthPotion();
+		}
+		if (this.active === 'maxHP') [this.maxHealthPotion()];
+		if (this.active === 'manaPotion') {
+			this.manaPotion();
+		}
+		if (this.active === 'maxMana') {
+			this.maxManaPotion();
+		}
+	}
+	healthPotion() {}
+	maxHealthPotion() {}
+	manaPotion() {}
+	maxManaPotion() {}
+	itemGranter() {}
 }
