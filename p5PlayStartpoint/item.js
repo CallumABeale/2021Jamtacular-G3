@@ -33,6 +33,11 @@ class Item {
 			this.maxManaPotion();
 		}
 	}
+	itemGranter() {
+		// Possible way to implement would be to redefine the array of availableItems to be an array of objects
+		// Each object would contain a name (item name) and a number (amount the player has)
+		// This would require the methods below to have minor changes in how they are referenced
+	}
 	healthPotion() {
 		const restoreAmount = 30;
 		if (testPlayer.health < testPlayer.maxHealth) {
@@ -61,5 +66,4 @@ class Item {
 		const maxManaAdd = 50;
 		testPlayer.mana += maxManaAdd;
 	}
-	itemGranter() {}
 }
