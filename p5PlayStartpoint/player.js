@@ -106,8 +106,19 @@ class Player {
 			}
 		}
 	}
-	useItem() {}
-	cycleItem() {}
+	useItem() {
+		this.activeItem.use();
+	}
+	cycleItem() {
+		if (this.itemList.includes(this.activeAbility)) {
+			let index = this.abilityList.indexOf(this.activeAbility);
+			if (index === this.abilityList.length - 1) {
+				this.activeAbility = this.abilityList[0];
+			} else {
+				this.activeAbility = this.abilityList[index + 1];
+			}
+		}
+	}
 	controls() {
 		/**
 		 * always applying gravity
