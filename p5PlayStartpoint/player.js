@@ -140,7 +140,7 @@ class Player {
 				this.sprite.velocity.x = bouncingBridges[0].velocity.x;
 			}
 		}
-		if (!this.sprite.collide(bouncingBridges)) {
+		if (!this.sprite.collide(bouncingBridges) && !this.sprite.collide(activeGrav)) {
 			this.sprite.friction = 0.1;
 		}
 
