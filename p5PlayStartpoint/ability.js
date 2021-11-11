@@ -18,14 +18,21 @@ class Ability {
 		// Call in draw
 		// Call controls && idle animation
 		if (this.sprite) {
-			if (testPlayer.sprite.getDirection() < 90) {
-				this.sprite.position.x =
-					testPlayer.sprite.position.x + 100 - this.sprite.life * 2;
-				this.sprite.position.y = testPlayer.sprite.position.y;
-			} else {
-				this.sprite.position.x =
-					testPlayer.sprite.position.x - 100 + this.sprite.life * 2;
-				this.sprite.position.y = testPlayer.sprite.position.y;
+			// Force lightning to be based on CURRENT player direction
+			if (this.active === 'lightning') {
+				if (testPlayer.sprite.getDirection() < 90) {
+					this.sprite.position.x =
+						testPlayer.sprite.position.x + 100 - this.sprite.life * 2;
+					this.sprite.position.y = testPlayer.sprite.position.y;
+				} else {
+					this.sprite.position.x =
+						testPlayer.sprite.position.x - 100 + this.sprite.life * 2;
+					this.sprite.position.y = testPlayer.sprite.position.y;
+				}
+			}
+			if (this.active === 'freeze') {
+			}
+			if (this.active === 'telekenises') {
 			}
 		}
 	}
