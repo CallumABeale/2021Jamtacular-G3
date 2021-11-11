@@ -125,7 +125,10 @@ function populateLevel() {
     for (let j = 0 ; j<groundGroup.length ; j++){
         for (let i = 0 ; i<bouncingBridges.length ; i++){
         if (groundGroup[j].antiGrav && groundGroup[j].antiGrav.overlap(bouncingBridges[i])){
-            activeGrav.add(bouncingBridges[i]);
+            bouncingBridge = createSprite(bouncingBridges[i].position.x,bouncingBridges[i].position.y,groundGroup[0].width/4,groundGroup[0].height/5);
+            bouncingBridge.velocity.x = 1
+            activeGrav.add(bouncingBridge);
+            bouncingBridges[i].remove();
             groundGroup[j].antiGrav.remove();
         } 
     }
@@ -175,6 +178,16 @@ function populateLevel() {
                 }
         }
     }
+    for (let i = 0 ; i<activeGrav.length ; i++){
+        if (activeGrav[i].collide(walls)){
+            activeGrav[i].velocity.x *=-1;
+                if (activeGrav[i].collide(testPlayer.sprite)){
+                    testPlayer.sprite.velocity.x=activeGrav[i].velocity.x;
+
+                }
+        }
+    }
+
         for (let i = 0 ; i<spikePits.length ; i++){
             spikePits.collide(groundGroup);
             spikePits.collide(walls);

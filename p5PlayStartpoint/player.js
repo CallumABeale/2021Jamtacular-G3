@@ -67,7 +67,7 @@ class Player {
 			} else {
 				if (this.sprite.touching.bottom) {
 					this.sprite.jumpActive = true;
-					this.sprite.velocity.y = 0;
+					this.sprite.velocity.y = 1;
 				}
 			}
 		}
@@ -123,7 +123,7 @@ class Player {
 		/**
 		 * always applying gravity
 		 */
-		if (this.sprite.collide(bouncingBridges)) {
+		if (this.sprite.collide(bouncingBridges) || this.sprite.collide(activeGrav) && this.sprite.touching.bottom) {
 			this.sprite.jumpActive = true;
 			this.sprite.velocity.y = 0;
 			this.sprite.friction = 0;
@@ -172,7 +172,6 @@ class Player {
 		if (this.sprite.collide(activeGrav) && keyIsDown(32)) {
 			this.sprite.jumpActive = false;
 			this.sprite.position.y -= resolution * 2;
-			this.sprite.jumpActive = false;
 			gravity = -1;
 		} else {
 			if (
@@ -184,7 +183,7 @@ class Player {
 				this.sprite.position.y -= resolution * 2;
 				gravity = -1;
 			} else {
-				if (keyIsDown(32) && !this.sprite.collide(antiGrav)) {
+				if (keyIsDown(32)) {
 					if (this.sprite.jumpActive == true && this.sprite.velocity.y < 2) {
 						this.sprite.position.y -= resolution * 2;
 						this.sprite.velocity.y = -walls[0].height / 6;
