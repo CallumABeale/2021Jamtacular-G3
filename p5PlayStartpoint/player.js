@@ -18,7 +18,13 @@ class Player {
 	p5Load() {
 		// Call in preload
 		// load images for animation
+
+		this.animations.idle = loadAnimation('./img/player/idle.gif');
+		this.animations.run = loadAnimation('./img/player/run.gif');
+		this.animations.jump = loadAnimation('./img/player/jump.gif');
+		this.animations.fall = loadAnimation('./img/player/fall.gif');
 	}
+
 	p5Init(x = width * 0.2, y = height * 0.8) {
 		// Call in setup
 		// Create sprite && set sprite settings
@@ -31,6 +37,11 @@ class Player {
 		this.sprite.friction = 0.1;
 		// this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
 		this.sprite.debug = true;
+		this.sprite.addAnimation('idle', this.animations.idle);
+		this.sprite.addAnimation('run', this.animations.run);
+		this.sprite.addAnimation('jump', this.animations.jump);
+		this.sprite.addAnimation('fall', this.animations.fall);
+		this.sprite.setCollider('rectangle', 0, 37, 50, 50);
 
 		this.sprite.jumpActive = true;
 	}
@@ -41,7 +52,7 @@ class Player {
 			this.abilityCooldown--;
 			console.log(this.sprite.abilityCooldown);
 		}
-		if (keyIsDown(90) && camera.zoom > (zoomLevel / resolution) * 3) {
+		if (keyIsDown(90) && camera.zoom > zoomLevel * 0.5) {
 			camera.zoom *= 0.95;
 		}
 		if (this.sprite.collide(groundGroup)) {
@@ -88,10 +99,20 @@ class Player {
 		this.controls();
 		if (int(this.sprite.velocity.x) === 0) {
 			this.idle();
+		} else if (
+			int(this.sprite.velocity.x) !== 0 &&
+			int(this.sprite.velocity.y) === 1
+		) {
+			this.sprite.changeAnimation('run');
+		} else {
+			this.sprite.changeAnimation('fall');
+		}
+		if (!this.sprite.jumpActive && this.sprite.getAnimationLabel() !== 'jump') {
+			this.sprite.changeAnimation('jump');
 		}
 	}
 	idle() {
-		// this.sprite.changeAnimation("standing")
+		this.sprite.changeAnimation('idle');
 	}
 	castAbility() {
 		this.activeAbility.cast(this.sprite.position.x, this.sprite.position.y);
@@ -123,7 +144,10 @@ class Player {
 		/**
 		 * always applying gravity
 		 */
-		if (this.sprite.collide(bouncingBridges) || this.sprite.collide(activeGrav) && this.sprite.touching.bottom) {
+		if (
+			this.sprite.collide(bouncingBridges) ||
+			(this.sprite.collide(activeGrav) && this.sprite.touching.bottom)
+		) {
 			this.sprite.jumpActive = true;
 			this.sprite.velocity.y = 0;
 			this.sprite.friction = 0;
@@ -140,7 +164,10 @@ class Player {
 				this.sprite.velocity.x = bouncingBridges[0].velocity.x;
 			}
 		}
-		if (!this.sprite.collide(bouncingBridges) && !this.sprite.collide(activeGrav)) {
+		if (
+			!this.sprite.collide(bouncingBridges) &&
+			!this.sprite.collide(activeGrav)
+		) {
 			this.sprite.friction = 0.1;
 		}
 
