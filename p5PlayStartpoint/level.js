@@ -19,11 +19,9 @@ class Level {
 		// Call in setup
 		// Create sprite && set sprite settings
 		GenerateLevel(this.assets);
-		cleanupLevel();
-	}
+			}
 	update() {
 		populateLevel();
-
 		// Call in draw
 		// Call controls && idle animation
 	}

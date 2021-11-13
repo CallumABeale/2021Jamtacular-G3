@@ -20,14 +20,14 @@ class Ability {
 		if (this.sprite) {
 			// Force lightning to be based on CURRENT player direction
 			if (this.active === 'lightning') {
-				if (testPlayer.sprite.getDirection() < 90) {
+				if (testPlayer.sprite.getDirection() < 90 && testPlayer.sprite.getDirection() >-180)  {
 					this.sprite.position.x =
 						testPlayer.sprite.position.x + 100 - this.sprite.life * 2;
-					this.sprite.position.y = testPlayer.sprite.position.y;
+					this.sprite.position.y = testPlayer.sprite.position.y+30;
 				} else {
 					this.sprite.position.x =
 						testPlayer.sprite.position.x - 100 + this.sprite.life * 2;
-					this.sprite.position.y = testPlayer.sprite.position.y;
+					this.sprite.position.y = testPlayer.sprite.position.y+30;
 				}
 			}
 			if (this.active === 'freeze') {
@@ -57,7 +57,7 @@ class Ability {
 		}
 	}
 	freeze(x, y) {
-		this.sprite = createSprite(x, y, 10, 10);
+		this.sprite = createSprite(x, y+75, 10, 10);
 		this.sprite.life = 60;
 		if (this.sprite.life > 0) {
 			this.sprite.life -= 1;

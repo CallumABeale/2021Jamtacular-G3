@@ -25,18 +25,26 @@ function setup() {
 	testLevel.p5Init();
 	testPlayer.p5Init();
 	camera.zoom = 0.25;
+	createEnemies();
+	for (let i = 0 ; i<enemies.length ; i++){
+	enemies[i].p5Load()
+	enemies[i].p5Init()
+	}
 }
 
 function draw() {
 	background(backgroundImg);
-	camera.position.x = testPlayer.sprite.position.x;
-	camera.position.y = testPlayer.sprite.position.y;
+	camera.position.x = constrain(testPlayer.sprite.position.x, 375+ walls[0].width/2, 1500*3-375-walls[0].width/2);
+	camera.position.y = constrain(testPlayer.sprite.position.y,250+groundGroup[0].height/2, 2750-groundGroup[0].height/2);
 	if (camera.zoom < zoomLevel && frameCount > 30 && !keyIsDown(90)) {
 		camera.zoom *= 1.1;
 	}
 	testPlayer.update();
 	testLevel.update();
 	testPlayer.activeAbility.update();
+	for (let i = 0 ; i<enemies.length ; i++){
+	enemies[i].update();
+	}
 	// image(lightningSpriteSheet,testPlayer.sprite.position.x,testPlayer.sprite.position.y)
 
 	drawSprites();

@@ -40,16 +40,19 @@ class Player {
 		this.sprite = createSprite(
 			testSprite.position.x,
 			testSprite.position.y,
-			CANVASWIDTH / resolution / 5,
+			50,
 			CANVASHEIGHT / resolution / 1.5
 		);
+		this.sprite.immovable = true;
 		this.sprite.friction = 0.1;
 		// this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
-		this.sprite.debug = true;
+		this.sprite.debug = false;
 		this.sprite.addAnimation('idle', this.animations.idle);
 		this.sprite.addAnimation('run', this.animations.run);
 		this.sprite.addAnimation('jump', this.animations.jump);
 		this.sprite.addAnimation('fall', this.animations.fall);
+		this.sprite.addAnimation('attackOne', this.animations.attackOne);
+
 		this.sprite.setCollider('rectangle', 0, 37, 50, 50);
 
 		this.sprite.jumpActive = true;
@@ -57,6 +60,10 @@ class Player {
 	update() {
 		// Call in draw
 		// Call controls && idle animation
+		if (this.sprite.bounce(spikePits)){
+			this.sprite.position.y-=resolution*2
+			this.sprite.velocity.y-= walls[0].height / 6;
+		}
 		if (this.abilityCooldown > 0) {
 			this.abilityCooldown--;
 			console.log(this.sprite.abilityCooldown);
@@ -77,17 +84,30 @@ class Player {
 			}
 		}
 		if (
-			this.sprite.collide(bouncingBridges) &&
-			!this.sprite.collide(activeGrav)
+			this.sprite.collide(bouncingBridges)
 		) {
+			console.log('bouncingbridge')
 			gravity = 1;
+			this.sprite.velocity.y = 0;
 			if (this.sprite.touching.top) {
 				this.sprite.position.y += 200 / resolution;
-				this.sprite.velocity.y = 1;
 			} else {
 				if (this.sprite.touching.bottom) {
 					this.sprite.jumpActive = true;
-					this.sprite.velocity.y = 1;
+				}
+			}
+		}
+		if (
+			this.sprite.collide(activeGrav)
+		) {
+			console.log('bouncingbridge')
+			gravity = 1;
+			this.sprite.velocity.y = 0;
+			if (this.sprite.touching.top) {
+				this.sprite.position.y += 200 / resolution;
+			} else {
+				if (this.sprite.touching.bottom) {
+					this.sprite.jumpActive = true;
 				}
 			}
 		}
@@ -109,7 +129,9 @@ class Player {
 		// If not moving in any direction
 		if (
 			int(this.sprite.velocity.x) === 0 &&
-			int(this.sprite.velocity.y) === 1
+			int(this.sprite.velocity.y) === 1 &&
+			!keyIsDown(81)
+			
 		) {
 			this.idle();
 			// If moving in x direction but not moving in y
@@ -117,15 +139,18 @@ class Player {
 			int(this.sprite.velocity.x) !== 0 &&
 			int(this.sprite.velocity.y) === 1
 		) {
-			this.sprite.changeAnimation('run');
 			// If falling
-		} else if (int(this.sprite.velocity.y) > 1) {
+		} else if (int(this.sprite.velocity.y) > 2 && !keyIsDown(81)
+		) {
 			this.sprite.changeAnimation('fall');
+
 		}
 
 		// If not able to jump show this anim
-		if (!this.sprite.jumpActive && this.sprite.getAnimationLabel() !== 'jump') {
+		if (!this.sprite.jumpActive && this.sprite.getAnimationLabel() !== 'jump' && !keyIsDown(81)
+		) {
 			this.sprite.changeAnimation('jump');
+
 		}
 	}
 	idle() {
@@ -162,8 +187,7 @@ class Player {
 		 * always applying gravity
 		 */
 		if (
-			this.sprite.collide(bouncingBridges) ||
-			(this.sprite.collide(activeGrav) && this.sprite.touching.bottom)
+			this.sprite.collide(bouncingBridges)
 		) {
 			this.sprite.jumpActive = true;
 			this.sprite.velocity.y = 0;
@@ -178,7 +202,7 @@ class Player {
 				this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
 				this.sprite.velocity.x += 0.5;
 			} else {
-				this.sprite.velocity.x = bouncingBridges[0].velocity.x;
+				this.sprite.velocity.x += bouncingBridges[0].velocity.x;
 			}
 		}
 		if (
@@ -188,15 +212,15 @@ class Player {
 			this.sprite.friction = 0.1;
 		}
 
-		if (!this.sprite.collide(groundGroup)) {
+		if (!this.sprite.collide(groundGroup) && !this.sprite.collide(bouncingBridges) && !this.sprite.collide(activeGrav)) {
 			this.sprite.velocity.y += gravity;
 		}
 
 		/**
 		 * If LEFT_ARROW is pressed, move left
 		 */
-		if (keyIsDown(LEFT_ARROW)) {
-			// this.sprite.changeAnimation("moving")
+		if (keyIsDown(LEFT_ARROW) && !keyIsDown(81)	) {
+			this.sprite.changeAnimation('run');
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
 			this.sprite.velocity.x -= 0.5;
 		}
@@ -204,8 +228,9 @@ class Player {
 		 * If RIGHT_ARROW is pressed, move right
 		 * If SHIFT is pressed, it will move twice as fast
 		 */
-		if (keyIsDown(RIGHT_ARROW)) {
-			// this.sprite.changeAnimation("moving")
+		if (keyIsDown(RIGHT_ARROW) && !keyIsDown(81)
+		) {
+			this.sprite.changeAnimation('run');
 			this.sprite.mirrorX(Math.sign(this.sprite.velocity.x));
 			this.sprite.velocity.x += 0.5;
 		}
@@ -215,8 +240,9 @@ class Player {
 		 */
 		if (this.sprite.collide(activeGrav) && keyIsDown(32)) {
 			this.sprite.jumpActive = false;
-			this.sprite.position.y -= resolution * 2;
+			this.sprite.position.y -= resolution * 2.5;
 			gravity = -1;
+			console.log('whynograv')
 		} else {
 			if (
 				keyIsDown(32) &&
@@ -243,6 +269,7 @@ class Player {
 		if (this.abilityCooldown == 0 && keyWentDown(81)) {
 			this.castAbility();
 			this.abilityCooldown = 30;
+			this.sprite.changeAnimation('attackOne');
 		}
 		/**
 		 * If E is pressed, use item

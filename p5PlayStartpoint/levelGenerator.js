@@ -23,6 +23,8 @@ let spikesImg;
 let padImg;
 let platformImg;
 let portalAnim;
+let chestImg;
+let enemy;
 
 function GenerateLevel(assets) {
 	walls = new Group();
@@ -44,6 +46,7 @@ function GenerateLevel(assets) {
 	padImg = assets.pad;
 	platformImg = assets.platform;
 	portalAnim = assets.portal;
+	chestImg = assets.chest
 
 	for (let y = 0; y < resolution; y++) {
 		grid[y] = [];
@@ -144,8 +147,11 @@ function removeWalls(a, b) {
 		b.wall[0] = false;
 	}
 }
-
-function cleanupLevel() {}
+function createEnemies(){
+for (let i = 0 ; i<resolution*2 ; i++){
+	enemies[i] = new Enemy(2)
+	}
+}
 
 function populateLevel() {
 	for (let j = 0; j < groundGroup.length; j++) {
@@ -290,6 +296,7 @@ function populateLevel() {
 					walls[0].width,
 					groundGroup[0].height
 				);
+				gameChest.addImage('closed', chestImg);
 			} else {
 				gameChest = createSprite(
 					chestTesters2[i].position.x + walls[0].width / 2,
@@ -297,6 +304,8 @@ function populateLevel() {
 					walls[0].width,
 					groundGroup[0].height
 				);
+				gameChest.addImage('closed', chestImg);
+
 			}
 			chestTesters2[i].remove();
 			i--;
@@ -325,7 +334,7 @@ class Cell {
 		stroke(255);
 		strokeWeight(1);
 		if (this.wall[0]) {
-			line(xPos, yPos, xPos + this.w, yPos);
+			// line(xPos, yPos, xPos + this.w, yPos);
 			let ground = createSprite(
 				int((this.x + 0.5) * this.w * 1.5),
 				int(this.y * this.h * 1.5),
@@ -333,7 +342,7 @@ class Cell {
 				int(CANVASHEIGHT / resolution / 1.25)
 			);
 			ground.immovable = true;
-			ground.debug = true;
+			ground.debug = false;
 			ground.antiGrav = createSprite(
 				ground.position.x,
 				ground.position.y + CANVASHEIGHT / resolution,
@@ -385,7 +394,7 @@ class Cell {
 				this.h * 1.9
 			);
 			wall.immovable = true;
-			wall.debug = true;
+			wall.debug = false;
 			wallImg.resize(wall.width, wall.height);
 			wall.addImage('wall', wallImg);
 			wall.typeTestR = createSprite(
