@@ -45,7 +45,7 @@ class Player {
 		);
 		this.sprite.friction = 0.1;
 		// this.sprite.setCollider("circle", 0, 0, CANVASWIDTH/resolution/25)
-		this.sprite.debug = true;
+		this.sprite.debug = false;
 		this.sprite.addAnimation('idle', this.animations.idle);
 		this.sprite.addAnimation('run', this.animations.run);
 		this.sprite.addAnimation('jump', this.animations.jump);

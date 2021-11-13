@@ -11,7 +11,8 @@ class Level {
 		this.assets.ground = loadImage('./img/level/ground.png');
 		this.assets.pad = loadImage('./img/level/pad.png');
 		this.assets.platform = loadImage('./img/level/platform.png');
-		this.assets.portal = loadAnimation('./img/level/portal-green.gif');
+		this.assets.portalStart = loadAnimation('./img/level/portal-green.gif');
+		this.assets.portalEnd = loadAnimation('./img/level/portal-purple.gif');
 		this.assets.spikes = loadImage('./img/level/spikes.png');
 		this.assets.wall = loadImage('./img/level/wall.png');
 	}

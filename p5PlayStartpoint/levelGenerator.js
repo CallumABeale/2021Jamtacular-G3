@@ -22,7 +22,9 @@ let groundImg;
 let spikesImg;
 let padImg;
 let platformImg;
-let portalAnim;
+let portalStartAnim;
+let portalEndAnim;
+let chestImg;
 
 function GenerateLevel(assets) {
 	walls = new Group();
@@ -43,7 +45,10 @@ function GenerateLevel(assets) {
 	spikesImg = assets.spikes;
 	padImg = assets.pad;
 	platformImg = assets.platform;
-	portalAnim = assets.portal;
+	portalStartAnim = assets.portalStart;
+	portalEndAnim = assets.portalEnd;
+	chestImg = assets.chest;
+	chestImg.resize(40, 0);
 
 	for (let y = 0; y < resolution; y++) {
 		grid[y] = [];
@@ -60,7 +65,7 @@ function GenerateLevel(assets) {
 		25
 	);
 	testSprite.shapeColor = '#fff';
-	testSprite.addAnimation('portal', assets.portal);
+	testSprite.addAnimation('portal', portalStartAnim);
 	console.log(current);
 	maxStack = 0;
 
@@ -71,7 +76,7 @@ function GenerateLevel(assets) {
 		25,
 		25
 	);
-	// endSprite.addAnimation('portal', assets.portalAnim);
+	endSprite.addAnimation('portal', portalEndAnim);
 }
 
 function createMaze() {
@@ -121,7 +126,8 @@ function createMaze() {
 		);
 		ground.immovable = true;
 		ground.debug = false;
-
+		wall.shapeColor = '#310101';
+		ground.shapeColor = '#310101';
 		wall.immovable = true;
 		groundGroup.add(ground);
 		walls.add(wall);
@@ -264,6 +270,7 @@ function populateLevel() {
 			);
 			chestTest2R.velocity.x = 5;
 			chestTest2R.life = 40;
+			chestTest2R.visible = false;
 			chestTest2R.dir = 'R';
 			chestTesters2.add(chestTest2R);
 			chestTest2L = createSprite(
@@ -275,6 +282,7 @@ function populateLevel() {
 			chestTest2L.velocity.x = -5;
 			chestTest2L.life = 40;
 			chestTest2L.dir = 'L';
+			chestTest2L.visible = false;
 			chestTesters2.add(chestTest2L);
 
 			chestTesters1[i].remove();
@@ -285,19 +293,21 @@ function populateLevel() {
 		if (chestTesters2[i] && chestTesters2[i].collide(walls)) {
 			if (chestTesters2[i].dir == 'R') {
 				gameChest = createSprite(
-					chestTesters2[i].position.x - walls[0].width / 2,
-					chestTesters2[i].position.y,
+					chestTesters2[i].position.x - walls[0].width / 2 - 4,
+					chestTesters2[i].position.y + 4,
 					walls[0].width,
 					groundGroup[0].height
 				);
 			} else {
 				gameChest = createSprite(
-					chestTesters2[i].position.x + walls[0].width / 2,
-					chestTesters2[i].position.y,
+					chestTesters2[i].position.x + walls[0].width / 2 + 4,
+					chestTesters2[i].position.y + 4,
 					walls[0].width,
 					groundGroup[0].height
 				);
 			}
+
+			gameChest.addImage('chest', chestImg);
 			chestTesters2[i].remove();
 			i--;
 			gameChest.velocity.y = 1;
@@ -333,7 +343,7 @@ class Cell {
 				int(CANVASHEIGHT / resolution / 1.25)
 			);
 			ground.immovable = true;
-			ground.debug = true;
+			ground.debug = false;
 			ground.antiGrav = createSprite(
 				ground.position.x,
 				ground.position.y + CANVASHEIGHT / resolution,
@@ -385,7 +395,7 @@ class Cell {
 				this.h * 1.9
 			);
 			wall.immovable = true;
-			wall.debug = true;
+			wall.debug = false;
 			wallImg.resize(wall.width, wall.height);
 			wall.addImage('wall', wallImg);
 			wall.typeTestR = createSprite(
