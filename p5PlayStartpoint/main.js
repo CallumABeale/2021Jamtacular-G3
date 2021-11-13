@@ -15,6 +15,7 @@ function preload() {
 		'img/abilities/lightning/tile006.png',
 		'img/abilities/lightning/tile007.png'
 	);
+	backgroundImg = loadImage('./img/level/background.png');
 	testLevel.p5Load();
 	testPlayer.p5Load();
 }
@@ -27,7 +28,7 @@ function setup() {
 }
 
 function draw() {
-	background('#1c1117');
+	background(backgroundImg);
 	camera.position.x = testPlayer.sprite.position.x;
 	camera.position.y = testPlayer.sprite.position.y;
 	if (camera.zoom < zoomLevel && frameCount > 30 && !keyIsDown(90)) {

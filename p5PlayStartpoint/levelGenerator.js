@@ -19,6 +19,10 @@ let bouncingBridges;
 let activeGrav;
 let wallImg;
 let groundImg;
+let spikesImg;
+let padImg;
+let platformImg;
+let portalAnim;
 
 function GenerateLevel(assets) {
 	walls = new Group();
@@ -36,6 +40,10 @@ function GenerateLevel(assets) {
 	activeGrav = new Group();
 	wallImg = assets.wall;
 	groundImg = assets.ground;
+	spikesImg = assets.spikes;
+	padImg = assets.pad;
+	platformImg = assets.platform;
+	portalAnim = assets.portal;
 
 	for (let y = 0; y < resolution; y++) {
 		grid[y] = [];
@@ -51,7 +59,8 @@ function GenerateLevel(assets) {
 		25,
 		25
 	);
-
+	testSprite.shapeColor = '#fff';
+	testSprite.addAnimation('portal', assets.portal);
 	console.log(current);
 	maxStack = 0;
 
@@ -62,6 +71,7 @@ function GenerateLevel(assets) {
 		25,
 		25
 	);
+	// endSprite.addAnimation('portal', assets.portalAnim);
 }
 
 function createMaze() {
@@ -151,6 +161,7 @@ function populateLevel() {
 					groundGroup[0].height / 5
 				);
 				bouncingBridge.velocity.x = 1;
+				bouncingBridge.addImage('platform', platformImg);
 				activeGrav.add(bouncingBridge);
 				bouncingBridges[i].remove();
 				groundGroup[j].antiGrav.remove();
@@ -206,6 +217,8 @@ function populateLevel() {
 				walls[0].height / 3
 			);
 			pitSpikes.velocity.y = 1;
+			spikesImg.resize(pitSpikes.width, spikesImg.height);
+			pitSpikes.addImage('spikes', spikesImg);
 			dropTesters[i].done = true;
 			bouncingBridge = createSprite(
 				pitSpikes.position.x,
@@ -213,6 +226,7 @@ function populateLevel() {
 				groundGroup[0].width / 4,
 				groundGroup[0].height / 5
 			);
+			bouncingBridge.addImage('platform', platformImg);
 			bouncingBridge.velocity.x = 1;
 			bouncingBridges.add(bouncingBridge);
 			spikePits.add(pitSpikes);
@@ -326,6 +340,7 @@ class Cell {
 				ground.width / 5,
 				ground.height / 3
 			);
+			ground.antiGrav.addImage('pad', padImg);
 			ground.antiGrav.velocity.y = 10;
 
 			ground.vertDist = createSprite(

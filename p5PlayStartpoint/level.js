@@ -6,8 +6,14 @@ class Level {
 	p5Load() {
 		// Call in preload
 		// load images for animation
-		this.assets.wall = loadImage('./img/level/wall.png');
+		this.assets.chestOpen = loadImage('./img/level/chest-open.png');
+		this.assets.chest = loadImage('./img/level/chest.png');
 		this.assets.ground = loadImage('./img/level/ground.png');
+		this.assets.pad = loadImage('./img/level/pad.png');
+		this.assets.platform = loadImage('./img/level/platform.png');
+		this.assets.portal = loadAnimation('./img/level/portal-green.gif');
+		this.assets.spikes = loadImage('./img/level/spikes.png');
+		this.assets.wall = loadImage('./img/level/wall.png');
 	}
 	p5Init() {
 		// Call in setup

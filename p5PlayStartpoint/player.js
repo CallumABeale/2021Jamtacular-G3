@@ -19,10 +19,19 @@ class Player {
 		// Call in preload
 		// load images for animation
 
-		this.animations.idle = loadAnimation('./img/player/idle.gif');
-		this.animations.run = loadAnimation('./img/player/run.gif');
-		this.animations.jump = loadAnimation('./img/player/jump.gif');
+		this.animations.attackSpecial = loadAnimation(
+			'./img/player/attack-special.gif'
+		);
+		this.animations.attackOne = loadAnimation('./img/player/attack1.gif');
+		this.animations.attackTwo = loadAnimation('./img/player/attack2.gif');
+		this.animations.attackThree = loadAnimation('./img/player/attack3.gif');
+		this.animations.death = loadAnimation('./img/player/death.gif');
+		this.animations.defend = loadAnimation('./img/player/defend.gif');
 		this.animations.fall = loadAnimation('./img/player/fall.gif');
+		this.animations.idle = loadAnimation('./img/player/idle.gif');
+		this.animations.jump = loadAnimation('./img/player/jump.gif');
+		this.animations.run = loadAnimation('./img/player/run.gif');
+		this.animations.takeDamage = loadAnimation('./img/player/take-damage.gif');
 	}
 
 	p5Init(x = width * 0.2, y = height * 0.8) {
@@ -97,16 +106,24 @@ class Player {
 			}
 		}
 		this.controls();
-		if (int(this.sprite.velocity.x) === 0) {
+		// If not moving in any direction
+		if (
+			int(this.sprite.velocity.x) === 0 &&
+			int(this.sprite.velocity.y) === 1
+		) {
 			this.idle();
+			// If moving in x direction but not moving in y
 		} else if (
 			int(this.sprite.velocity.x) !== 0 &&
 			int(this.sprite.velocity.y) === 1
 		) {
 			this.sprite.changeAnimation('run');
-		} else {
+			// If falling
+		} else if (int(this.sprite.velocity.y) > 1) {
 			this.sprite.changeAnimation('fall');
 		}
+
+		// If not able to jump show this anim
 		if (!this.sprite.jumpActive && this.sprite.getAnimationLabel() !== 'jump') {
 			this.sprite.changeAnimation('jump');
 		}
