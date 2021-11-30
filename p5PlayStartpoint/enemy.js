@@ -62,7 +62,7 @@ this.movement();
 		} else {
 			this.sprite.velocity.y = 0;
 		}
-if (this.sprite.bounce(testPlayer.sprite)){
+if (this.sprite.collide(testPlayer.sprite)){
 
 		testPlayer.sprite.position.x+= (testPlayer.sprite.position.x-this.sprite.position.x)/abs(testPlayer.sprite.position.x-this.sprite.position.x)*10
 
